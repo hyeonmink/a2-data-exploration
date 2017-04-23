@@ -9,16 +9,32 @@
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.8.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.4/d3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.js"></script>
+    <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
+
     <!-- Custom files -->
     <link rel="stylesheet" href="css/main.css" />
 
     <!-- your script file -->
     <script src="js/main.js"></script>
 </head>
-<body>
+<body class = "container">
     <h1>a2 - data exploration</h1>
     <p>Info474 - Min Kim...</p>
+
+    <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-primary">
+        <input value = "1960" type="radio" name="options" id="option1" autocomplete="off">1960
+        </label>
+        <label class="btn btn-primary active">
+        <input value = "1990" type="radio" name="options" id="option2" autocomplete="off" checked>1990
+        </label>
+        <label class="btn btn-primary">
+        <input value = "2015" type="radio" name="options" id="option3" autocomplete="off" >2015
+        </label>
+    </div>
+
 
     <div id="vis">
 

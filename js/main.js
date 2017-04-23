@@ -1,6 +1,13 @@
 $(function(){
-    d3.csv('data/SAT_Results.csv', function(error, allData){
-        var section = 'Math';
+    d3.csv('data/dataset.csv', function(error, allData){
+        var decade = '1990';
+        var deathRate, birthRate
+
+        var yMax = d3.max(allData, (d) => d3.max([+d.Death_rate_60, +d.Death_rate_15, +d.Death_rate_90]));
+        var yMin = d3.min(allData, (d) => d3.min([+d.Death_rate_60, +d.Death_rate_15, +d.Death_rate_90]));
+        var xMax = d3.max(allData, (d) => d3.max([+d.Birth_rate_60, +d.Birth_rate_15, +d.Birth_rate_90]));
+        var xMin = d3.min(allData, (d) => d3.min([+d.Birth_rate_60, +d.Birth_rate_15, +d.Birth_rate_90]));
+
 
         var margin = {
             left:   70,
@@ -31,30 +38,40 @@ $(function(){
                             .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
         var xAxisText = svg.append('text')
-                           .attr('transform', `translate(${(margin.left+drawWidth)/2}, ${drawHeight+margin.top+40}) rotate(-90)`)
-                           .attr('class', 'title');
+                           .attr('transform', `translate(${(margin.left+drawWidth)/2},${(drawHeight+margin.top+40)})`)
+                           .attr('class', 'title')
+                           .text('Birth rate, crude (per 1,000 people)');
 
         var yAxisText = svg.append('text')
                            .attr('transform', `translate(${margin.left - 40},${(margin.top + drawHeight / 2)}) rotate(-90)`)
-                           .attr('class', 'title');
+                           .attr('class', 'title')
+                           .text('Death rate, crude (per 1,000 people)');
         
         var xAxis = d3.axisBottom();
 
         var yAxis = d3.axisLeft();
 
-        var xScale = d3.scaleBand();
+        var xScale = d3.scaleLinear();
 
         var yScale = d3.scaleLinear();
-
         var setScale = (data) => {
-            var schools = data.map((d)=> d.SCHOOL_NAME)
+            switch (decade) {
+                case '1960' :
+                    deathRate = data.map((d)=> +d.Death_rate_60);
+                    birthRate = data.map((d)=> +d.Birth_rate_60);
+                    break;
+                case '1990' :
+                    deathRate = data.map((d)=> +d.Death_rate_90);
+                    birthRate = data.map((d)=> +d.Birth_rate_90);
+                    break;
+                case '2015' :
+                    deathRate = data.map((d)=> +d.Death_rate_15);
+                    birthRate = data.map((d)=> +d.Birth_rate_15);
+                    break;
+            }
 
             xScale.range([0, drawWidth])
-                  .padding(0.1)
-                  .domain(schools);
-            var yMin = d3.min(data, (d) => d.Reading);
-            
-            var yMax = d3.max(data, (d) => d.Reading);
+                  .domain([0, xMax]);
 
             yScale.range([drawHeight, 0])
                   .domain([0, yMax]);
@@ -66,33 +83,64 @@ $(function(){
 
             xAxisLabel.call(xAxis);
             yAxisLabel.call(yAxis);
-
         }
+
+
+        var tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
+            return d.Country_Name;
+        });
+        g.call(tip);
+
+        // Get list of regions for colors
+        var continents = allData.map((d)=> d.Continent);
+
+        // Set an ordinal scale for colors
+        var colorScale = d3.scaleOrdinal().domain(continents).range(d3.schemeCategory10);
 
         var draw = ((data)=> {
             setScale(data);
             setAxes();
-            console.log("?")
-            var bars = g.selectAll('rect')
-                        .data(data);
+            var circles = g.selectAll('circle')
+                            .data(data);
 
-            bars.enter()
-                .append('rect')
-                .attr('x', ((d)=> xScale(d.SCHOOL_NAME)))
-                .attr('y', ((d)=> drawHeight))
-                .attr('width', xScale.bandwidth())
-                .merge(bars)
-                .attr('y', ((d)=> yScale(d.Reading)))
-                .attr('height', (d)=> drawHeight - yScale(d.Reading));
+            circles.enter()
+                   .append('circle')
+                   .merge(circles)
+                   .attr('r', 10)
+                   .attr('fill', (d,i) => colorScale(d.Continent))
+                   .on('mouseover', tip.show)
+                   .on('mouseout', tip.hide)
+                   .style('opacity', 0.3)
+                   .attr('title', (d) => d.Country_Name);
 
-            bars.exit()
-                .remove();            
+            switch (decade) {
+                case '1960' :
+                    circles.transition()
+                           .duration(600)
+                           .attr('cx', (d)=> xScale(d.Birth_rate_60))
+                           .attr('cy', (d)=> yScale(d.Death_rate_60));
+                    break;
+                case '1990' :
+                    circles.transition()
+                           .duration(600).attr('cx', (d)=> xScale(d.Birth_rate_90))
+                           .attr('cy', (d)=> yScale(d.Death_rate_90));
+                    break;
+                case '2015' :
+                    circles.transition()
+                           .duration(600).attr('cx', (d)=> xScale(d.Birth_rate_15))
+                           .attr('cy', (d)=> yScale(d.Death_rate_15));
+                    break;              
+            }
+
+            circles.exit()
+                   .remove();            
         });
-        console.log(allData);
+        $("input").on('change', function() {
+            // Get value, determine if it is the sex or type controller
+            decade = $(this).val();
+            draw(allData)
+        });
         draw(allData);
-        //var currentData = filterData();
-        //console.log(allData)
-        //draw(allData);
-
+        draw(allData);
     })
 })
