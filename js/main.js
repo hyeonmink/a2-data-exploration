@@ -10,7 +10,7 @@ $(function(){
         };
 
         var height = 600,
-            width = 1000,
+            width = 1100,
             drawHeight = height - margin.bottom - margin.top;
             drawWidth = width - margin.right - margin.left;
 
@@ -31,7 +31,7 @@ $(function(){
                             .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
         var xAxisText = svg.append('text')
-                           .attr('transform', `translate(${(margin.left+drawWidth)/2}, ${drawHeight+margin.top+40})`)
+                           .attr('transform', `translate(${(margin.left+drawWidth)/2}, ${drawHeight+margin.top+40}) rotate(-90)`)
                            .attr('class', 'title');
 
         var yAxisText = svg.append('text')
@@ -52,9 +52,9 @@ $(function(){
             xScale.range([0, drawWidth])
                   .padding(0.1)
                   .domain(schools);
-            var yMin = d3.min(data, (d) => d.Math);
+            var yMin = d3.min(data, (d) => d.Reading);
             
-            var yMax = d3.max(data, (d) => d.Math);
+            var yMax = d3.max(data, (d) => d.Reading);
 
             yScale.range([drawHeight, 0])
                   .domain([0, yMax]);
@@ -63,12 +63,16 @@ $(function(){
         var setAxes = () => {
             xAxis.scale(xScale);
             yAxis.scale(yScale);
+
+            xAxisLabel.call(xAxis);
+            yAxisLabel.call(yAxis);
+
         }
 
         var draw = ((data)=> {
             setScale(data);
             setAxes();
-
+            console.log("?")
             var bars = g.selectAll('rect')
                         .data(data);
 
@@ -78,17 +82,17 @@ $(function(){
                 .attr('y', ((d)=> drawHeight))
                 .attr('width', xScale.bandwidth())
                 .merge(bars)
-                .attr('y', ((d)=> yScale(d.Math)))
-                .attr('height', (d)=> drawHeight - yScale(d.Math));
+                .attr('y', ((d)=> yScale(d.Reading)))
+                .attr('height', (d)=> drawHeight - yScale(d.Reading));
 
             bars.exit()
-                .remove();
-            
-            console.log(bars)
+                .remove();            
         });
-
-        //var currentData = filterData();
+        console.log(allData);
         draw(allData);
+        //var currentData = filterData();
+        //console.log(allData)
+        //draw(allData);
 
     })
 })
