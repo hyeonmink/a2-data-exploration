@@ -1,9 +1,9 @@
-@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css);
+
 .axis line,
-.axis path {
+/*.axis path {
   fill: none;
   stroke: #000;
-}
+}*/
 
 .title {
   text-anchor: middle;
@@ -11,4 +11,20 @@
 
 .axis text {
   font-size: 10px;
+}
+
+.legend, legend-text, legend-rect {
+  pointer-events: none;
+}
+
+.container{
+  text-align: center;
+  margin-left: 0 auto;
+  margin-right: 0 auto;
+}
+
+.writing p{
+  text-align: left;
+  margin-left: 5em;
+  margin-right: 5em;
 }

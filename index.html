@@ -18,26 +18,43 @@
 
     <!-- your script file -->
     <script src="js/main.js"></script>
-</head>
-<body class = "container">
-    <h1>a2 - data exploration</h1>
-    <p>Info474 - Min Kim...</p>
 
-    <div class="btn-group" data-toggle="buttons">
-        <label class="btn btn-primary">
-        <input value = "1960" type="radio" name="options" id="option1" autocomplete="off">1960
-        </label>
-        <label class="btn btn-primary active">
-        <input value = "1990" type="radio" name="options" id="option2" autocomplete="off" checked>1990
-        </label>
-        <label class="btn btn-primary">
-        <input value = "2015" type="radio" name="options" id="option3" autocomplete="off" >2015
-        </label>
+</head>
+<body>
+    <div class="container">
+        <h1>a2 - data exploration</h1>
+        <p>Min Kim - 04/25/2017</p>
+    </div>
+
+    <div class="container">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary">
+            <input value = "1960" type="radio" name="options" id="option1" autocomplete="off">1960
+            </label>
+            <label class="btn btn-primary active">
+            <input value = "1990" type="radio" name="options" id="option2" autocomplete="off" checked>1990
+            </label>
+            <label class="btn btn-primary">
+            <input value = "2015" type="radio" name="options" id="option3" autocomplete="off" >2015
+            </label>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="vis">
+
+        </div>
     </div>
 
 
-    <div id="vis">
-
+    <div class="writing container">
+        <h1>About my graph..</h1>
+        <p>
+            &emsp; For the assignment 2, I implemented a scatter plot, displaying birth and death rates per 1,000 people for each of countries in 1960, 1990, and 2015: X axis displays birth rate and Y axis displays death rate. For Both X and Y scale, I used scalelinear() because even though the axes don't change interactively with given set of the data, it allows users to compare the position between eras, providing a scale among common axes. Each circles in the graph displays each country. To provide more effective way to understand data, each of the circle in the graph has different color based on the regions that each country has, as well as the legend shows which regions is displayed by which color. dotted line with 45 degree angle shows the guide line of the graph to compare birth and death rate, where left side of the line shows the countries that has more death rate than birth rate, and right for opposite cases. There are three buttons for changing time among 60', 90', and 15' and whenever the user clicks the button, each country(a circle) moves smoothly to the other position so that user can keep track of how the data of the country changes over time. 
+        </p>
+        <p>
+            &emsp; As I mentioned, there are 3 bottoms at top of the graph that enable users to switch the graph between 3 eras. Since both Y and X axes are static, it helps users to compare the values by comparing the position between each buttons. It supports very effectively to answer the questions that asks how the birth rate/death rate trend has been changed, which continent has the most birth/death rate ratio, or which country has more death rate than birth rate. For example, if you look at each of 3 graphs, you can easily see that red circles are grouped in bottom left. To interpret what it means by bottom left, that means countries that has low death rate, as well as birth rate. By reading the legend on top right, users can easily understand that countries in europe & central asia has that characteristics compared to other regions.
+        </p>
     </div>
 </body>
 </html>
